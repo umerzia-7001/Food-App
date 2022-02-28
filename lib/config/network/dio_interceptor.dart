@@ -11,6 +11,8 @@ class DioInterceptior extends Interceptor {
     super.onRequest(options, handler);
 
     final prefs = await SharedPreferences.getInstance();
+
+    // geting token from storage for authorization header
     final String? authToken = prefs.getString("authToken");
 
     options.headers = {
@@ -25,6 +27,7 @@ class DioInterceptior extends Interceptor {
     }
   }
 
+// Logging any errors caught by Dio Interceptor whle handling API
   @override
   Future<String> onError(DioError err, ErrorInterceptorHandler handler) async {
     super.onError(err, handler);

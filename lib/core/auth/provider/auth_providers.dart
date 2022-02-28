@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:food_app/config/network/network_config.dart';
 import 'package:food_app/core/auth/domain/login_service.dart';
 import 'package:food_app/core/auth/models/user.dart';
+import 'package:food_app/core/auth/presentation/login_screen.dart';
 import 'package:food_app/core/auth/services/login_impl.dart';
 import 'package:food_app/core/menu/presentation/home_screen.dart';
 import 'package:mobx/mobx.dart';
@@ -32,7 +33,7 @@ abstract class _Auth with ChangeNotifier, Store {
   final Dio dio = NetworkConfig().dio;
   final LoginService _loginService = LoginServiceImpl();
 
-//  to observe loading states in UI
+//  to observe loading states in UI using Mobx
   @observable
   bool isEmailLoading = false;
   @observable
@@ -43,13 +44,9 @@ abstract class _Auth with ChangeNotifier, Store {
 
   set isAuthenticated(bool isAuth) {
     if (tokens != null) {
-      _isAuth = isAuth;
+      _isAuth = isAuthenticated;
       notifyListeners();
     }
-  }
-
-  bool get authenticated {
-    return tokens != null;
   }
 
   String get token {
@@ -62,16 +59,31 @@ abstract class _Auth with ChangeNotifier, Store {
     return tokens;
   }
 
-  // logout function to logout user
-  Future<void> logout() async {
+  // to logout user
+  Future<void> logout(BuildContext context) async {
+    final pref = await SharedPreferences.getInstance();
     isAuthenticated = false;
     tokens = '';
+    tokens == null;
     userId = '';
     _expiresIn = DateTime.now();
     if (_authTimer != null) {
       _authTimer.cancel();
-      // _authTimer = null;
     }
+    pref.clear();
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => EmailAuthScreen(),
+      ),
+    );
+  }
+
+  @observable
+  late String authToken = '';
+
+  bool get isAuth {
+    // getting token to see if user logged in or not
+    return authToken != '';
   }
 
   // EMAIL AUTTH
@@ -112,12 +124,11 @@ abstract class _Auth with ChangeNotifier, Store {
         );
 
         isAuthenticated = true;
-        print('tokens');
-        print(tokens);
+
         notifyListeners();
 
         // saving token in local storage
-        await pref.setString('token', tokens);
+        await pref.setString('authToken', tokens);
 
         final user = json.encode(
           {
@@ -131,7 +142,7 @@ abstract class _Auth with ChangeNotifier, Store {
         pref.setString('user', user);
 
         Future.delayed(const Duration(milliseconds: 1), () {
-          Navigator.of(context).push(
+          Navigator.of(context).pushReplacement(
             MaterialPageRoute(
               builder: (_) => HomeScreen(),
             ),
@@ -145,9 +156,10 @@ abstract class _Auth with ChangeNotifier, Store {
       }
     } on HttpException catch (error) {
       isEmailLoading = false;
-      // error handling wrt response recieved : Firebase specific
+
       var errorMessage = 'Authentication failed';
 
+      // handling error  wrt response recieved : Firebase specific
       if (error.toString().contains('EMAIL_EXISTS')) {
         errorMessage = 'This email address is already in use.';
       } else if (error.toString().contains('INVALID_EMAIL')) {
@@ -174,6 +186,7 @@ abstract class _Auth with ChangeNotifier, Store {
     }
   }
 
+// showing snackbar for the error message
   void _showSnackBar(BuildContext context, String message) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         duration: const Duration(seconds: 3),
@@ -183,6 +196,7 @@ abstract class _Auth with ChangeNotifier, Store {
             style: const TextStyle(color: Colors.red, fontSize: 15.0))));
   }
 
+// auto login user if token exists and not expired
   Future<bool> tryAutoLogin() async {
     final pref = await SharedPreferences.getInstance();
     if (!pref.containsKey('user')) {

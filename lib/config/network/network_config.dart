@@ -8,6 +8,7 @@ class NetworkConfig {
 
   late Dio dio;
 
+  // can set multiple base _URL for STAGING, PRODUCTION etc
   static const _URL = "";
 
   factory NetworkConfig() {

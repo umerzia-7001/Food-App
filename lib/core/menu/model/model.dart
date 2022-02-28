@@ -21,7 +21,7 @@ class FoodItems {
         'cuisine': cuisine,
         'image': image,
       };
-  // creating a Trip object from a firebase snapshot
+  // creating a FoodItem object from a firebase snapshot
   FoodItems.fromSnapshot(DocumentSnapshot snapshot)
       : name = snapshot['name'],
         cuisine = snapshot['cuisine'],

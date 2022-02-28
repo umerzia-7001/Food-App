@@ -12,14 +12,14 @@ mixin Styles {
           fontSize: 15,
           height: 1.0,
           fontWeight: FontWeight.w400,
-          color: AppColor.grey6,
+          color: AppColor.LM_BORDER_ACTIVE_BLUE6,
         ),
         bodyText2: TextStyle(
           fontFamily: "Roboto",
           fontSize: 15,
           height: 1.0,
           fontWeight: FontWeight.w400,
-          color: AppColor.grey6,
+          color: AppColor.LM_BORDER_ACTIVE_BLUE6,
         )),
     visualDensity: VisualDensity.adaptivePlatformDensity,
   );

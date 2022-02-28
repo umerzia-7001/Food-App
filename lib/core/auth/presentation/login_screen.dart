@@ -58,14 +58,14 @@ class _EmailAuthScreenState extends State<EmailAuthScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: AppColor.LM_BACKGROUND_GREY1,
+        backgroundColor: AppColor.LM_BACKGROUND_BASIC,
         appBar: null,
         body: Consumer<Auth>(
           builder: (context, loginStore, _) {
             return Observer(
               builder: (_) => Scaffold(
                   resizeToAvoidBottomInset: true,
-                  backgroundColor: AppColor.LM_BACKGROUND_GREY1,
+                  backgroundColor: AppColor.LM_BACKGROUND_BASIC,
                   key: _scaffoldKey,
                   body: Form(
                     key: _formKey,
@@ -81,7 +81,7 @@ class _EmailAuthScreenState extends State<EmailAuthScreen>
                           child: Column(
                             children: [
                               SizedBox(
-                                  height: _config.sh(80).toDouble(),
+                                  height: _config.sh(100).toDouble(),
                                   child:
                                       Image.asset('assets/images/bobtail.jpg')),
                               SizedBox(
@@ -90,10 +90,10 @@ class _EmailAuthScreenState extends State<EmailAuthScreen>
                                               .bottom >
                                           0.0)
                                       ? (_config.uiHeightPx * 0.001).toDouble()
-                                      : (_config.uiHeightPx * 0.10).toDouble()),
+                                      : (_config.uiHeightPx * 0.20).toDouble()),
                               Card(
                                 elevation: 0,
-                                color: AppColor.LM_BACKGROUND_GREY1,
+                                color: AppColor.LM_BACKGROUND_BASIC,
                                 child: SizedBox(
                                   width: SizeConfig.screenWidthDp,
                                   child: Column(
@@ -126,7 +126,7 @@ class _EmailAuthScreenState extends State<EmailAuthScreen>
                                                     TextAlignVertical.bottom,
                                                 controller: _emailController,
                                                 cursorColor: AppColor
-                                                    .LM_BUTTON_NORMAL_BLUE_6,
+                                                    .LM_BORDER_ACTIVE_BLUE6,
                                                 decoration: InputDecoration(
                                                     border: OutlineInputBorder(
                                                       borderRadius:
@@ -135,7 +135,7 @@ class _EmailAuthScreenState extends State<EmailAuthScreen>
                                                       borderSide:
                                                           const BorderSide(
                                                         color: AppColor
-                                                            .LM_BUTTON_NORMAL_BLUE_6,
+                                                            .LM_BORDER_ACTIVE_BLUE6,
                                                       ),
                                                     ),
                                                     focusedBorder:
@@ -146,11 +146,11 @@ class _EmailAuthScreenState extends State<EmailAuthScreen>
                                                       borderSide:
                                                           const BorderSide(
                                                         color: AppColor
-                                                            .LM_BUTTON_NORMAL_BLUE_6,
+                                                            .LM_BORDER_ACTIVE_BLUE6,
                                                       ),
                                                     ),
                                                     fillColor: AppColor
-                                                        .LM_BACKGROUND_GREY1,
+                                                        .LM_BACKGROUND_BASIC,
                                                     filled: true,
                                                     focusedErrorBorder:
                                                         OutlineInputBorder(
@@ -187,8 +187,7 @@ class _EmailAuthScreenState extends State<EmailAuthScreen>
                                                         fontSize: 16,
                                                         fontWeight:
                                                             FontWeight.w400,
-                                                        color: AppColor
-                                                            .LM_FONT_DISABLE_GREY5)),
+                                                        color: AppColor.grey7)),
                                                 onSaved: (value) {
                                                   _authData['email'] = value!;
                                                 },
@@ -223,7 +222,7 @@ class _EmailAuthScreenState extends State<EmailAuthScreen>
                                                     TextAlignVertical.bottom,
                                                 controller: _passwordController,
                                                 cursorColor: AppColor
-                                                    .LM_BUTTON_NORMAL_BLUE_6,
+                                                    .LM_BORDER_ACTIVE_BLUE6,
                                                 decoration: InputDecoration(
                                                     focusedBorder:
                                                         OutlineInputBorder(
@@ -233,11 +232,11 @@ class _EmailAuthScreenState extends State<EmailAuthScreen>
                                                       borderSide:
                                                           const BorderSide(
                                                         color: AppColor
-                                                            .LM_BUTTON_NORMAL_BLUE_6,
+                                                            .LM_BORDER_ACTIVE_BLUE6,
                                                       ),
                                                     ),
                                                     fillColor: AppColor
-                                                        .LM_BACKGROUND_GREY1,
+                                                        .LM_BACKGROUND_BASIC,
                                                     filled: true,
                                                     focusedErrorBorder:
                                                         OutlineInputBorder(
@@ -267,7 +266,7 @@ class _EmailAuthScreenState extends State<EmailAuthScreen>
                                                       borderSide:
                                                           const BorderSide(
                                                         color: AppColor
-                                                            .LM_BUTTON_NORMAL_BLUE_6,
+                                                            .LM_BORDER_ACTIVE_BLUE6,
                                                       ),
                                                     ),
                                                     hintText: 'password',
@@ -276,8 +275,7 @@ class _EmailAuthScreenState extends State<EmailAuthScreen>
                                                         fontSize: 16,
                                                         fontWeight:
                                                             FontWeight.w400,
-                                                        color: AppColor
-                                                            .LM_FONT_DISABLE_GREY5)),
+                                                        color: AppColor.grey7)),
                                                 validator: (val) {
                                                   if (val!.isEmpty) {
                                                     return 'Please Provide valid email address';
@@ -301,8 +299,7 @@ class _EmailAuthScreenState extends State<EmailAuthScreen>
                                                 ? 'Waiting'
                                                 : 'Log In',
                                             color: loginStore.isEmailLoading
-                                                ? AppColor
-                                                    .LM_BUTTON_DISABLE_GREY5
+                                                ? AppColor.grey7
                                                 : null,
                                             onPress: () {
                                               _validate();
@@ -325,28 +322,19 @@ class _EmailAuthScreenState extends State<EmailAuthScreen>
                                               }
                                             },
                                           )),
-                                      // SizedBox(
-                                      //     height: (MediaQuery.of(context)
-                                      //                 .viewInsets
-                                      //                 .bottom >
-                                      //             0.0)
-                                      //         ? (_config.uiHeightPx * 0.5)
-                                      //             .toDouble()
-                                      //         : (_config.uiHeightPx * 0.35)
-                                      //             .toDouble()),
+                                      SizedBox(
+                                          height: (MediaQuery.of(context)
+                                                      .viewInsets
+                                                      .bottom >
+                                                  0.0)
+                                              ? (_config.uiHeightPx * 0.0025)
+                                                  .toDouble()
+                                              : (_config.uiHeightPx * 0.075)
+                                                  .toDouble()),
                                     ],
                                   ),
                                 ),
                               ),
-                              SizedBox(
-                                  //height: _config.uiHeightPx * 0.25),
-
-                                  height: (MediaQuery.of(context)
-                                              .viewInsets
-                                              .bottom >
-                                          0.0)
-                                      ? (_config.uiHeightPx * 0.0005).toDouble()
-                                      : (_config.uiHeightPx * 0.25).toDouble()),
                             ],
                           ),
                         ),

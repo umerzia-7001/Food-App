@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+// FOR FUTURE USE : working with webviews
 class ResponsiveLayout extends StatelessWidget {
   final Widget iphone;
   final Widget macbook;

@@ -4,9 +4,10 @@ import 'package:food_app/Utils/colors.dart';
 import 'package:food_app/core/menu/model/model.dart';
 import 'package:provider/provider.dart';
 
-import '../../../config/dummy_into.dart';
 import '../../../config/size_config/size_config.dart';
 import '../provider/food_provider.dart';
+import '../widgets/grid_container.dart';
+import '../widgets/home_drawer.dart';
 
 class HomeScreen extends StatefulWidget {
   static const routeName = '/home';
@@ -20,7 +21,9 @@ class _OrderHomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    initList();
+    final FoodViewModel foodviewModel =
+        Provider.of<FoodViewModel>(context, listen: false);
+    foodviewModel.initList();
   }
 
   @override
@@ -28,87 +31,21 @@ class _OrderHomeScreenState extends State<HomeScreen> {
     super.dispose();
   }
 
-  void initList() async {
-    final QuerySnapshot<Map<String, dynamic>> result =
-        await FirebaseFirestore.instance.collection('Foods').get();
-    final List<DocumentSnapshot> resultDocument = result.docs;
-
-    //filteredFoods.removeWhere((item) => item.cuisine != select);
-    filteredFoods.clear();
-    resultDocument.forEach((value) {
-      FoodItems item = FoodItems(
-          name: value['name'],
-          image: value['image'],
-          cuisine: value['cuisine']);
-      filteredFoods.add(item);
-    });
-    setState(() {});
-  }
-
-  // List<String> DummyInfo = ['italian', 'mexican', 'indian'];
   final SizeConfig _config = SizeConfig();
 
   int selectedTag = 0;
 
-  final List<FoodItems> filteredFoods = [];
-
-  getData(int index) async {
-    String name = '';
-    String cuisine = '';
-    String image = '';
-
-    String select = '';
-    final FoodViewModel foodViewModel =
-        Provider.of<FoodViewModel>(context, listen: false);
-
-    if (index == 0) {
-      select = 'italian';
-    } else if (index == 1) {
-      select = 'mexican';
-    } else if (index == 2) {
-      select = 'indian';
-    } else if (index == 3) {
-      select = '';
-    }
-    final QuerySnapshot<Map<String, dynamic>> result =
-        await FirebaseFirestore.instance
-            .collection('Foods')
-            .where(
-              'cuisine',
-              isEqualTo: select,
-            )
-            .get();
-    final List<DocumentSnapshot> resultDocument = result.docs;
-
-    //filteredFoods.removeWhere((item) => item.cuisine != select);
-    filteredFoods.clear();
-    resultDocument.forEach((value) {
-      FoodItems item = FoodItems(
-          name: value['name'],
-          image: value['image'],
-          cuisine: value['cuisine']);
-      filteredFoods.add(item);
-      name = value['name'];
-      cuisine = value['cuisine'];
-      image = value['name'];
-      print("Mobile name: " + name);
-      print("cuisine: " + cuisine);
-      print("image: " + image);
-      print(filteredFoods);
-    });
-    setState(() {});
-  }
+  // final List<FoodItems> filteredFoods = [];
 
   @override
   Widget build(BuildContext context) {
-    final Stream<QuerySnapshot> _usersStream =
-        FirebaseFirestore.instance.collection('Foods').snapshots();
     final FoodViewModel foodViewModel =
-        Provider.of<FoodViewModel>(context, listen: false);
+        Provider.of<FoodViewModel>(context, listen: true);
 
-    //getData(0);
+    List<FoodItems> menuItems = foodViewModel.filteredFoods;
 
     return Scaffold(
+        drawer: OrderHomeDrawer(),
         appBar: AppBar(
           backgroundColor: AppColor.LM_BORDER_ACTIVE_BLUE6,
           bottom: PreferredSize(
@@ -143,17 +80,21 @@ class _OrderHomeScreenState extends State<HomeScreen> {
                               return InkWell(
                                 onTap: () {
                                   setState(() {
-                                    // foodViewModel.currentFilter =
-                                    //     DummyInfo.tags[position];
+                                    foodViewModel.currentFilter =
+                                        DummyInfo.tags[position];
 
                                     selectedTag = position;
-                                    getData(position);
+                                    if (position == 0) {
+                                      foodViewModel.initList();
+                                    } else {
+                                      foodViewModel.getData(position);
+                                    }
                                   });
                                 },
                                 child: Card(
                                   color: foodViewModel.currentFilter ==
                                           DummyInfo.tags[position]
-                                      ? AppColor.LM_BORDER_INFO_BLUE6
+                                      ? AppColor.LM_SEPARATOR_GREY4
                                       : AppColor.UI_GREY,
                                   elevation: 0,
                                   margin:
@@ -191,7 +132,7 @@ class _OrderHomeScreenState extends State<HomeScreen> {
                                                     .copyWith(
                                                         color: Colors.grey[600],
                                                         fontSize: 12,
-                                                        height: 0.75,
+                                                        height: 1,
                                                         fontWeight:
                                                             FontWeight.bold),
                                               ))
@@ -211,14 +152,26 @@ class _OrderHomeScreenState extends State<HomeScreen> {
             ),
           ),
         ),
-        body: ListView.builder(
-            itemCount: filteredFoods.length,
-            itemBuilder: (BuildContext context, int position) {
-              return ListTile(
-                leading: Text(filteredFoods[position].name!),
-                title: Text(filteredFoods[position].cuisine!),
-              );
-            }));
+        body: GridView.builder(
+          itemCount: menuItems.length,
+          itemBuilder: (context, index) => GridContainer(
+            name: menuItems[index].name!,
+            image: menuItems[index].image!,
+            cuisine: menuItems[index].cuisine!,
+          ),
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            mainAxisSpacing: 2,
+            crossAxisSpacing: 10,
+            crossAxisCount: 2,
+            childAspectRatio: 0.7,
+          ),
+        ));
+  }
+}
+
+// ALTERNATE METHOD FOR REAL TIME FIRESTORE CHANGES
+
+// to get contunuous stream of data from firestore
     //   StreamBuilder<QuerySnapshot>(
     //     stream: _usersStream,
     //     builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -246,5 +199,3 @@ class _OrderHomeScreenState extends State<HomeScreen> {
     //     },
     //   ),
     // );
-  }
-}

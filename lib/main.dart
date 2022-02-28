@@ -10,11 +10,9 @@ import 'package:food_app/config/size_config/size_config.dart';
 import 'package:food_app/core/auth/presentation/login_screen.dart';
 import 'package:food_app/core/auth/provider/auth_providers.dart';
 import 'package:food_app/core/menu/provider/food_provider.dart';
-import 'package:food_app/splash_screen.dart';
 import 'package:provider/provider.dart';
-
 import 'config/network/network_config.dart';
-import 'core/menu/presentation/home_screen.dart';
+import 'core/onboarding/splash_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -84,15 +82,16 @@ class _AppState extends State<MyApp> with WidgetsBindingObserver {
                               height: size.height,
                               width: size.width,
                               allowFontScaling: true);
-                          return auth.authenticated
-                              ? HomeScreen() // is user already authenticated
-                              : FutureBuilder(
-                                  future: auth.tryAutoLogin(),
-                                  builder: (ctx, authResult) => authResult
-                                              .connectionState ==
-                                          ConnectionState.waiting
-                                      ? SplashScreen() // waiting to check if user already logged in
-                                      : EmailAuthScreen());
+                          return SplashScreen();
+                          // return auth.isAuthenticated
+                          //     ? HomeScreen() // is user already authenticated
+                          //     : FutureBuilder(
+                          //         future: auth.tryAutoLogin(),
+                          //         builder: (ctx, authResult) => authResult
+                          //                     .connectionState ==
+                          //                 ConnectionState.waiting
+                          //             ? const SplashScreen() // waiting to check if user already logged in
+                          //             : EmailAuthScreen());
                         },
                       )));
             }

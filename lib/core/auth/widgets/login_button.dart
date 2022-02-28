@@ -18,7 +18,7 @@ class LoginButton extends StatelessWidget {
       style: ButtonStyle(
         backgroundColor: color != null
             ? MaterialStateProperty.all(color)
-            : MaterialStateProperty.all(AppColor.LM_BUTTON_NORMAL_BLUE_6),
+            : MaterialStateProperty.all(AppColor.LM_BORDER_ACTIVE_BLUE6),
         textStyle: MaterialStateProperty.all(
           Theme.of(context).textTheme.bodyText1!.copyWith(
                 fontSize: 16,
