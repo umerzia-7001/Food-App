@@ -16,10 +16,11 @@ import 'core/onboarding/splash_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  Firebase.initializeApp();
   NetworkConfig().initNetworkConfig();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
       .then((_) {
-    runApp(new MyApp());
+    runApp((new MyApp()));
   });
 }
 
@@ -31,8 +32,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _AppState extends State<MyApp> with WidgetsBindingObserver {
-  final Future<FirebaseApp> _initialization = Firebase.initializeApp();
-
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -44,65 +43,33 @@ class _AppState extends State<MyApp> with WidgetsBindingObserver {
     ));
 
     return MultiProvider(
-      providers: [
-        //  view providers
-        ChangeNotifierProvider<Auth>(
-          create: (_) => Auth(tokens: '', userId: ''),
-        ),
-        ChangeNotifierProvider<FoodViewModel>(
-          create: (_) => FoodViewModel(),
-        ),
-      ],
-      child: FutureBuilder(
-          // Initialize FlutterFire:
-          future: _initialization,
-          builder: (context, snapshot) {
-            if (snapshot.hasError) {
-              print("Something went wrong");
-
-              return Center(
-                child: Text("${snapshot.error}"),
-              );
-            }
-
-            // Once complete, show your application
-            if (snapshot.connectionState == ConnectionState.done) {
-              print("Firebase initialization completed");
-
-              return Consumer<Auth>(
-                  builder: (ctx, auth, _) => MaterialApp(
-                      title: 'Food App',
-                      debugShowCheckedModeBanner: false,
-                      theme: Styles.lightTheme,
-                      onGenerateRoute: RouteGenerator.generateRoute,
-                      home: Builder(
-                        builder: (context) {
-                          final Size size = MediaQuery.of(context).size;
-                          SizeConfig.init(context,
-                              height: size.height,
-                              width: size.width,
-                              allowFontScaling: true);
-                          return SplashScreen();
-                          // return auth.isAuthenticated
-                          //     ? HomeScreen() // is user already authenticated
-                          //     : FutureBuilder(
-                          //         future: auth.tryAutoLogin(),
-                          //         builder: (ctx, authResult) => authResult
-                          //                     .connectionState ==
-                          //                 ConnectionState.waiting
-                          //             ? const SplashScreen() // waiting to check if user already logged in
-                          //             : EmailAuthScreen());
-                        },
-                      )));
-            }
-            print("Waiting for Firebase initialization");
-            return Flex(direction: Axis.vertical, children: [
-              Expanded(
-                child: Container(color: Colors.white),
-              )
-            ]);
-          }),
-    );
+        providers: [
+          //  view providers
+          ChangeNotifierProvider<Auth>(
+            create: (_) => Auth(tokens: '', userId: ''),
+          ),
+          ChangeNotifierProvider<FoodViewModel>(
+            create: (_) => FoodViewModel(),
+          ),
+        ],
+        child: Consumer<Auth>(
+          builder: (ctx, auth, _) => MaterialApp(
+              title: 'Food App',
+              showPerformanceOverlay: false,
+              debugShowCheckedModeBanner: false,
+              theme: Styles.lightTheme,
+              onGenerateRoute: RouteGenerator.generateRoute,
+              home: Builder(
+                builder: (context) {
+                  final Size size = MediaQuery.of(context).size;
+                  SizeConfig.init(context,
+                      height: size.height,
+                      width: size.width,
+                      allowFontScaling: true);
+                  return SplashScreen();
+                },
+              )),
+        ));
   }
 
   @override

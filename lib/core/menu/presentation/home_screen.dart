@@ -49,13 +49,13 @@ class _OrderHomeScreenState extends State<HomeScreen> {
         appBar: AppBar(
           backgroundColor: AppColor.LM_BORDER_ACTIVE_BLUE6,
           bottom: PreferredSize(
-            preferredSize: const Size.fromHeight(70),
+            preferredSize: const Size.fromHeight(60),
             child: Padding(
               padding: const EdgeInsets.symmetric(
                 vertical: 5.0,
               ),
               child: SizedBox(
-                height: const Size.fromHeight(55).height,
+                height: const Size.fromHeight(50).height,
                 width: SizeConfig.screenWidthDp,
                 child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
@@ -85,8 +85,10 @@ class _OrderHomeScreenState extends State<HomeScreen> {
 
                                     selectedTag = position;
                                     if (position == 0) {
+                                      // getting all menu items
                                       foodViewModel.initList();
                                     } else {
+                                      // getting filtered menu items
                                       foodViewModel.getData(position);
                                     }
                                   });
@@ -94,9 +96,9 @@ class _OrderHomeScreenState extends State<HomeScreen> {
                                 child: Card(
                                   color: foodViewModel.currentFilter ==
                                           DummyInfo.tags[position]
-                                      ? AppColor.LM_SEPARATOR_GREY4
-                                      : AppColor.UI_GREY,
-                                  elevation: 0,
+                                      ? AppColor.blue4
+                                      : AppColor.LM_BACKGROUND_BASIC,
+                                  elevation: 5,
                                   margin:
                                       const EdgeInsets.symmetric(horizontal: 4),
                                   child: Container(
@@ -106,36 +108,17 @@ class _OrderHomeScreenState extends State<HomeScreen> {
                                       child: Center(
                                           child: Row(
                                         children: [
-                                          Text(
-                                            DummyInfo.tags[position],
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .bodyText1!
-                                                .copyWith(color: Colors.white),
-                                          ),
-                                          const SizedBox(
-                                            width: 10,
-                                          ),
                                           Container(
-                                              padding: const EdgeInsets.all(8),
-                                              decoration: BoxDecoration(
-                                                  color: Colors.white
-                                                      .withOpacity(0.5),
-                                                  shape: BoxShape.circle),
-                                              child: Text(
-                                                DummyInfo.tags[position]
-                                                    .toLowerCase()
-                                                    .toString(),
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .bodyText1!
-                                                    .copyWith(
-                                                        color: Colors.grey[600],
-                                                        fontSize: 12,
-                                                        height: 1,
-                                                        fontWeight:
-                                                            FontWeight.bold),
-                                              ))
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Text(
+                                              DummyInfo.tags[position],
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyText1!
+                                                  .copyWith(
+                                                      color: Colors.black),
+                                            ),
+                                          ),
                                         ],
                                       ))),
                                 ),

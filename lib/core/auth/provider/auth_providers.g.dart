@@ -42,7 +42,8 @@ mixin _$Auth on _Auth, Store {
   final _$emailLoginAsyncAction = AsyncAction('_Auth.emailLogin');
 
   @override
-  Future<void> emailLogin(BuildContext context, String email, String password) {
+  Future<void> emailLogin(
+      BuildContext? context, String email, String password) {
     return _$emailLoginAsyncAction
         .run(() => super.emailLogin(context, email, password));
   }

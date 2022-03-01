@@ -42,7 +42,7 @@ class _OrderHomeDrawerState extends State<OrderHomeDrawer> {
         child: SingleChildScrollView(
           child: Column(children: [
             const SizedBox(
-              height: 30,
+              height: 60,
             ),
             ListTile(
                 tileColor: Colors.white,

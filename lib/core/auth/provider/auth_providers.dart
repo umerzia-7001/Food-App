@@ -89,14 +89,14 @@ abstract class _Auth with ChangeNotifier, Store {
   // EMAIL AUTTH
   @action
   Future<void> emailLogin(
-      BuildContext context, String email, String password) async {
+      BuildContext? context, String email, String password) async {
     final body = {"email": email.trim(), 'password': password.trim()};
 
     try {
       isEmailLoading = true;
 
       Response<dynamic> response = await _loginService.emailLogin(
-          context: context, email: email, password: password);
+          context: context!, email: email, password: password);
 
       isEmailLoading = false;
 
@@ -171,7 +171,7 @@ abstract class _Auth with ChangeNotifier, Store {
       } else if (error.toString().contains('INVALID_PASSWORD')) {
         errorMessage = 'Invalid password.';
       }
-      _showSnackBar(context, errorMessage);
+      _showSnackBar(context!, errorMessage);
     } on DioError catch (e) {
       // handling DIO errors
       String errorMessage = e.response!.data['error']['message'].toString();
@@ -179,7 +179,7 @@ abstract class _Auth with ChangeNotifier, Store {
       isEmailLoading = false;
       if (e.response!.statusCode != 200) {
         print(e.response!.data['error']['message'].toString());
-        _showSnackBar(context, errorMessage);
+        _showSnackBar(context!, errorMessage);
       } else {
         log(e.toString());
       }

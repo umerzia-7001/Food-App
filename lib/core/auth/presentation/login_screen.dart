@@ -20,6 +20,12 @@ class _EmailAuthScreenState extends State<EmailAuthScreen>
 
   final GlobalKey<FormState> _formKey = GlobalKey();
 
+// for focusing on fields
+
+  FocusNode? input1FocusNode = FocusNode();
+
+  FocusNode? input2FocusNode = FocusNode();
+
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   Map<String, String> _authData = {
     'email': '',
@@ -75,9 +81,6 @@ class _EmailAuthScreenState extends State<EmailAuthScreen>
                           left: 0,
                           bottom: 0,
                           right: 0,
-                          // top: (MediaQuery.of(context).viewInsets.bottom > 0.0)
-                          //     ? (_config.uiHeightPx * 0.0000).toDouble()
-                          //     : (_config.uiHeightPx * 0.1).toDouble(),
                           child: Column(
                             children: [
                               SizedBox(
@@ -85,11 +88,12 @@ class _EmailAuthScreenState extends State<EmailAuthScreen>
                                   child:
                                       Image.asset('assets/images/bobtail.jpg')),
                               SizedBox(
+                                  // checking when keyboard opens , adjusting height
                                   height: (MediaQuery.of(context)
                                               .viewInsets
                                               .bottom >
                                           0.0)
-                                      ? (_config.uiHeightPx * 0.001).toDouble()
+                                      ? (_config.uiHeightPx * 0.0001).toDouble()
                                       : (_config.uiHeightPx * 0.20).toDouble()),
                               Card(
                                 elevation: 0,
@@ -114,89 +118,95 @@ class _EmailAuthScreenState extends State<EmailAuthScreen>
                                             child: Padding(
                                               padding: const EdgeInsets.only(
                                                   top: 0, bottom: 10),
-                                              child: TextFormField(
-                                                keyboardType:
-                                                    TextInputType.emailAddress,
-                                                style: const TextStyle(
-                                                    fontSize: 16),
-                                                textDirection:
-                                                    TextDirection.ltr,
-                                                textAlign: TextAlign.center,
-                                                textAlignVertical:
-                                                    TextAlignVertical.bottom,
-                                                controller: _emailController,
-                                                cursorColor: AppColor
-                                                    .LM_BORDER_ACTIVE_BLUE6,
-                                                decoration: InputDecoration(
-                                                    border: OutlineInputBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              8),
-                                                      borderSide:
-                                                          const BorderSide(
-                                                        color: AppColor
-                                                            .LM_BORDER_ACTIVE_BLUE6,
+                                              child: Container(
+                                                key: const Key('email'),
+                                                child: TextFormField(
+                                                  autofocus: true,
+                                                  // focusNode: input1FocusNode,
+                                                  // for testing
+                                                  key: GlobalKey(
+                                                      debugLabel: "email"),
+                                                  keyboardType: TextInputType
+                                                      .emailAddress,
+                                                  style: const TextStyle(
+                                                      fontSize: 16),
+                                                  textDirection:
+                                                      TextDirection.ltr,
+                                                  textAlign: TextAlign.center,
+                                                  textAlignVertical:
+                                                      TextAlignVertical.bottom,
+                                                  controller: _emailController,
+                                                  cursorColor: AppColor
+                                                      .LM_BORDER_ACTIVE_BLUE6,
+                                                  decoration: InputDecoration(
+                                                      border:
+                                                          OutlineInputBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(8),
+                                                        borderSide:
+                                                            const BorderSide(
+                                                          color: AppColor
+                                                              .LM_BORDER_ACTIVE_BLUE6,
+                                                        ),
                                                       ),
-                                                    ),
-                                                    focusedBorder:
-                                                        OutlineInputBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              8),
-                                                      borderSide:
-                                                          const BorderSide(
-                                                        color: AppColor
-                                                            .LM_BORDER_ACTIVE_BLUE6,
+                                                      focusedBorder:
+                                                          OutlineInputBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(8),
+                                                        borderSide:
+                                                            const BorderSide(
+                                                          color: AppColor
+                                                              .LM_BORDER_ACTIVE_BLUE6,
+                                                        ),
                                                       ),
-                                                    ),
-                                                    fillColor: AppColor
-                                                        .LM_BACKGROUND_BASIC,
-                                                    filled: true,
-                                                    focusedErrorBorder:
-                                                        OutlineInputBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              8),
-                                                      borderSide:
-                                                          const BorderSide(
-                                                        color: Colors.red,
+                                                      fillColor: AppColor
+                                                          .LM_BACKGROUND_BASIC,
+                                                      filled: true,
+                                                      focusedErrorBorder:
+                                                          OutlineInputBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(8),
+                                                        borderSide:
+                                                            const BorderSide(
+                                                          color: Colors.red,
+                                                        ),
                                                       ),
-                                                    ),
-                                                    errorBorder:
-                                                        OutlineInputBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              8),
-                                                      borderSide:
-                                                          const BorderSide(
-                                                        color: Colors.red,
+                                                      errorBorder:
+                                                          OutlineInputBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(8),
+                                                        borderSide:
+                                                            const BorderSide(
+                                                          color: Colors.red,
+                                                        ),
                                                       ),
-                                                    ),
-                                                    helperText: ' ',
-                                                    // border:
-                                                    //     UnderlineInputBorder(
-                                                    //   borderSide:
-                                                    //       BorderSide.none,
-                                                    //   borderRadius:
-                                                    //       BorderRadius.circular(
-                                                    //           8),
-                                                    // ),
-                                                    hintText: 'username',
-                                                    hintStyle: const TextStyle(
-                                                        fontFamily: "Roboto",
-                                                        fontSize: 16,
-                                                        fontWeight:
-                                                            FontWeight.w400,
-                                                        color: AppColor.grey7)),
-                                                onSaved: (value) {
-                                                  _authData['email'] = value!;
-                                                },
-                                                validator: (val) {
-                                                  if (val!.isEmpty ||
-                                                      !val.contains('@')) {
-                                                    return 'Please Provide valid email address';
-                                                  }
-                                                },
+                                                      helperText: ' ',
+                                                      hintText: 'username',
+                                                      hintStyle:
+                                                          const TextStyle(
+                                                              fontFamily:
+                                                                  "Roboto",
+                                                              fontSize: 16,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w400,
+                                                              color: AppColor
+                                                                  .grey7)),
+
+                                                  onSaved: (value) {
+                                                    _authData['email'] = value!;
+                                                  },
+                                                  validator: (val) {
+                                                    if (val!.isEmpty ||
+                                                        !val.contains('@')) {
+                                                      return 'Please Provide valid email address';
+                                                    }
+                                                  },
+                                                ),
                                               ),
                                             )),
                                       ),
@@ -211,6 +221,8 @@ class _EmailAuthScreenState extends State<EmailAuthScreen>
                                               padding: const EdgeInsets.only(
                                                   top: 0, bottom: 10),
                                               child: TextFormField(
+                                                focusNode: input2FocusNode,
+                                                key: const Key('password'),
                                                 keyboardType:
                                                     TextInputType.emailAddress,
                                                 style: const TextStyle(
@@ -281,9 +293,13 @@ class _EmailAuthScreenState extends State<EmailAuthScreen>
                                                     return 'Please Provide valid email address';
                                                   }
                                                 },
+                                                onTap: () => {
+                                                  input2FocusNode!
+                                                      .requestFocus()
+                                                },
                                                 onSaved: (value) {
                                                   _authData['password'] = value ??
-                                                      ''; // saving user data in authData
+                                                      ''; // saving user data in map: authData
                                                 },
                                               ),
                                             )),
@@ -323,6 +339,7 @@ class _EmailAuthScreenState extends State<EmailAuthScreen>
                                             },
                                           )),
                                       SizedBox(
+                                          // adjusting height on keyboard opening
                                           height: (MediaQuery.of(context)
                                                       .viewInsets
                                                       .bottom >
